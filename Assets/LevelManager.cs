@@ -26,8 +26,11 @@ public class LevelManager : MonoBehaviour
     void SetupLevel()
     {
         string[] horizSlices = initialLevel.Split(new string[] { "\n\n" }, System.StringSplitOptions.RemoveEmptyEntries);
+        Debug.Log(horizSlices.Length.ToString() + " slices");
         string[] firstSliceSplit = horizSlices[0].Split('\n');
-        level = new char[horizSlices.Length, firstSliceSplit.Length, firstSliceSplit[0].Length];
+        Debug.Log(firstSliceSplit.Length.ToString() + " columns");
+        level = new char[firstSliceSplit[0].Length, horizSlices.Length, firstSliceSplit.Length];
+        Debug.Log(firstSliceSplit[0].Length.ToString() + " rows");
         int x = 0, y = 0, z = 0;
         foreach (string slice in horizSlices)
         {
