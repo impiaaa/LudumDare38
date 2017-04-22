@@ -79,7 +79,7 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
-        transform.position = new Vector3(level.GetLength(0) * -0.5f, 0, level.GetLength(2) * -0.5f);
+        transform.position = new Vector3(level.GetLength(0) * -0.5f + 0.5f, 0, level.GetLength(2) * -0.5f + 0.5f);
     }
 
     public char SafeGet(int x, int y, int z)

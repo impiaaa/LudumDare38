@@ -28,6 +28,8 @@ public class DiggerCharacter : MonoBehaviour {
             lastPosition = transform.localPosition;
 
             Vector2 joyPosition = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            float cameraAngle = ((Camera.main.GetComponent<CameraController>().angle * Mathf.Rad2Deg) - 45 + 180)%360;
+            joyPosition = (Vector2)(Quaternion.Euler(0, 0, cameraAngle) * (Vector3)(joyPosition));
             Direction newDirection;
             if (joyPosition.sqrMagnitude < movementThreshold * movementThreshold)
             {
