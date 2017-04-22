@@ -5,10 +5,11 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public GameObject blockTemplate;
-    [TextArea(3, 10)]
+    [TextArea]
     public string initialLevel;
 
     public char[,,] level;
+    private GameObject[,,] tiles;
 
     void Start()
     {
@@ -16,7 +17,7 @@ public class LevelManager : MonoBehaviour
         {
             SetupLevel();
         }
-        if (transform.childCount == 0)
+        if (tiles == null || tiles.Length == 0)
         {
             UpdateLevel();
         }
@@ -53,6 +54,15 @@ public class LevelManager : MonoBehaviour
 
     void UpdateLevel()
     {
+        transform.position = new Vector3();
+        if (tiles != null)
+        {
+            foreach (GameObject tile in tiles)
+            {
+                Object.Destroy(tile);
+            }
+        }
+        tiles = new GameObject[level.GetLength(0),level.GetLength(1),level.GetLength(2)];
         for (int x = 0; x < level.GetLength(0); x++)
         {
             for (int y = 0; y < level.GetLength(1); y++)
@@ -61,11 +71,12 @@ public class LevelManager : MonoBehaviour
                 {
                     if (level[x, y, z] == 'x')
                     { // TODO optimize by looking at neighbors
-                        Object.Instantiate(blockTemplate, new Vector3(x, y, z), new Quaternion(), transform);
+                        tiles[x,y,z] = Object.Instantiate(blockTemplate, new Vector3(x, y, z), new Quaternion(), transform);
                     }
                 }
             }
         }
+        transform.position = new Vector3(level.GetLength(0) * -0.5f, 0, level.GetLength(2) * -0.5f);
     }
 
     public char SafeGet(int x, int y, int z)

@@ -17,15 +17,15 @@ public class DiggerCharacter : MonoBehaviour {
 
     void Start()
     {
-        initialRotation = transform.rotation;
+        initialRotation = transform.localRotation;
         DoMove(new Vector3());
     }
 
     void Update () {
         if (Time.time - lastMoveTime > movementCooldown)
         {
-            transform.position = targetPosition;
-            lastPosition = transform.position;
+            transform.localPosition = targetPosition;
+            lastPosition = transform.localPosition;
 
             Vector2 joyPosition = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             Direction newDirection;
@@ -106,7 +106,7 @@ public class DiggerCharacter : MonoBehaviour {
                 lastDirection = newDirection;
                 if (delta.sqrMagnitude > 0)
                 {
-                    transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg*Mathf.Atan2(delta.z, delta.x), new Vector3(0, 1, 0)) * initialRotation;
+                    transform.localRotation = Quaternion.AngleAxis(Mathf.Rad2Deg*Mathf.Atan2(delta.z, delta.x), new Vector3(0, -1, 0)) * initialRotation;
                 }
 
                 DoMove(delta);
@@ -117,16 +117,16 @@ public class DiggerCharacter : MonoBehaviour {
             float animTime = (Time.time - lastMoveTime) / movementCooldown;
             Vector3 newpos = lastPosition * (1.0f - animTime) + targetPosition * animTime;
             newpos = new Vector3(newpos.x, jumpAnim.Evaluate(animTime) * Mathf.Abs(lastPosition.y - targetPosition.y)/2 + newpos.y, newpos.z);
-            transform.position = newpos;
+            transform.localPosition = newpos;
         }
     }
 
     void DoMove(Vector3 delta)
     {
         lastMoveTime = Time.time;
-        Vector3 newPos = transform.position + delta;
+        Vector3 newPos = transform.localPosition + delta;
         int x = (int)newPos.x, y = (int)newPos.y, z = (int)newPos.z;
-        // raise up
+        // Jump up
         if (level.Collides(x, y, z))
         {
             if (!level.Collides(x, y+1, z))
@@ -140,13 +140,19 @@ public class DiggerCharacter : MonoBehaviour {
                 return;
             }
         }
-        while (!level.Collides(x, y-1, z) && y > 0)
+        // Fall down
+        while (!level.Collides(x, y-1, z))
         {
             Debug.Log("Fall down");
             y--;
+            if (y <= 0)
+            {
+                Debug.Log("Fell off level");
+                return;
+            }
         }
         targetPosition = new Vector3(x, y, z);
-        if (targetPosition != transform.position)
+        if (targetPosition != transform.localPosition && delta.sqrMagnitude > 0)
         {
             GetComponent<AudioSource>().Play();
         }
