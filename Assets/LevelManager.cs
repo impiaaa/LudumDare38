@@ -62,6 +62,27 @@ public class LevelManager : MonoBehaviour
             }
             y++;
         }
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player)
+        {
+            DiggerCharacter chara = player.GetComponent<DiggerCharacter>();
+            if (chara)
+            {
+                if (chara.prompt)
+                {
+                    Object.Destroy(chara.prompt);
+                }
+                if (levelIndex < chara.prompts.Length && chara.prompts[levelIndex] != null)
+                {
+                    chara.prompt = Object.Instantiate(chara.prompts[levelIndex], GameObject.FindObjectOfType<Canvas>().transform);
+                }
+                else
+                {
+                    chara.prompt = null;
+                }
+            }
+        }
     }
 
     public void UpdateLevel()
@@ -136,7 +157,7 @@ public class LevelManager : MonoBehaviour
 
     public bool Collides(int x, int y, int z)
     {
-        return SafeGet(x, y, z) != ' ' && SafeGet(x,y,z) != 'a';
+        return SafeGet(x, y, z) != ' ' && SafeGet(x,y,z) != 'a' && SafeGet(x, y, z) != 'p';
     }
 
     public bool CanStandOn(int x, int y, int z)
@@ -161,6 +182,7 @@ public class LevelManager : MonoBehaviour
 
     public void LoadNextLevel()
     {
+        Debug.Log("Loading next level");
         levelIndex++;
         if (levelIndex >= levelFiles.Length)
         {
@@ -181,6 +203,7 @@ public class LevelManager : MonoBehaviour
 
     public void LevelReady()
     {
+        Debug.Log("Level ready");
         GameObject.FindGameObjectWithTag("Player").GetComponent<DiggerCharacter>().enableInput = true;
     }
 }

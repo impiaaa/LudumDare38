@@ -9,8 +9,10 @@ public class DiggerCharacter : MonoBehaviour
     public AnimationCurve jumpAnim;
     public AudioClip jump;
     public AudioClip dig;
-    public bool enableInput = true;
+    public bool enableInput = false;
     public Vector3 targetPosition;
+    public TrackCharacter[] prompts;
+    public TrackCharacter prompt = null;
 
     enum Direction { POSX, POSZ, NEGX, NEGZ, NEUTRAL };
     Direction lastDirection = Direction.NEUTRAL;
@@ -205,10 +207,62 @@ public class DiggerCharacter : MonoBehaviour
             enableInput = false;
             level.DoLevelEnd();
         }
+        else if (level.SafeGet(x, y, z) == 'p')
+        {
+            prompt.StartCoroutine("FadeIn", 0.5f);
+        }
+        else if (prompt && prompt.visible)
+        {
+            prompt.CancelInvoke("FadeIn");
+            prompt.StartCoroutine("FadeOut", 0.5f);
+        }
         else if (targetPosition != transform.localPosition && delta.sqrMagnitude > 0)
         {
             GetComponent<AudioSource>().clip = jump;
             GetComponent<AudioSource>().Play();
+        }
+        switch (-1)//level.levelIndex)
+        {
+            case 0:
+                if (x == 0 && y == 1 && z == 0)
+                {
+                    prompt.StartCoroutine("FadeIn", 1.5f);
+                }
+                else if (transform.localPosition == new Vector3(0, 1, 0))
+                {
+                    prompt.StartCoroutine("FadeOut", 0.5f);
+                }
+                break;
+            case 2:
+                if (x == 4 && y == 1 && z == 2)
+                {
+                    prompt.StartCoroutine("FadeIn", 0.5f);
+                }
+                else if (transform.localPosition == new Vector3(4, 1, 2))
+                {
+                    prompt.StartCoroutine("FadeOut", 0.5f);
+                }
+                break;
+            case 5:
+                if (x == 4 && y == 5 && z == 0)
+                {
+                    prompt.StartCoroutine("FadeIn", 0.5f);
+                }
+                else if (transform.localPosition == new Vector3(4, 5, 0))
+                {
+                    prompt.StartCoroutine("FadeOut", 0.5f);
+                }
+                break;
+            case 6:
+                if (x == 1 && y == 1 && z == 0)
+                {
+                    prompt.StartCoroutine("FadeIn", 0.5f);
+                }
+                else if (transform.localPosition == new Vector3(1, 1, 0))
+                {
+                    prompt.StartCoroutine("FadeOut", 0.5f);
+                }
+                break;
         }
     }
 

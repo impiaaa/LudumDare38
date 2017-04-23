@@ -8,15 +8,19 @@ public class MainMenuActions : MonoBehaviour {
     public float fadeDuration;
     public new AudioSource audio;
 
+    private AsyncOperation loadop;
+
     public void Begin()
     {
+        loadop = SceneManager.LoadSceneAsync("Main");
+        loadop.allowSceneActivation = false;
         Camera.main.GetComponent<FlyAwayAnimator>().StartCoroutine("BeginAnimation", new System.Action(LevelReady));
         StartCoroutine("FadeOutStuff");
     }
 
     public void LevelReady()
     {
-        SceneManager.LoadScene("Main");
+        loadop.allowSceneActivation = true;
     }
 
     IEnumerator FadeOutStuff()
@@ -31,5 +35,11 @@ public class MainMenuActions : MonoBehaviour {
                 canvas.SetAlpha(x);
             audio.volume = x;
         }
+    }
+
+    [UnityEditor.MenuItem("Screenshot/Take screenshot")]
+    static void Screenshot()
+    {
+        Application.CaptureScreenshot("test.png");
     }
 }
