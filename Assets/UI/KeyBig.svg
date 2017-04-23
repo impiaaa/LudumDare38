@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="64"
+   height="44"
+   viewBox="0 0 16.933332 11.641666"
+   version="1.1"
+   id="svg4497"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="KeyBig.svg"
+   inkscape:export-filename="F:\Users\Spencer\Documents\MiniDigger\Assets\UI\KeyBigCtrl.png"
+   inkscape:export-xdpi="192"
+   inkscape:export-ydpi="192">
+  <defs
+     id="defs4491" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7.0514153"
+     inkscape:cx="38.080056"
+     inkscape:cy="18.257157"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1672"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4499" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata4494">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-285.35831)">
+    <path
+       style="opacity:1;fill:#808080;fill-opacity:1;stroke:#000000;stroke-width:0.26499999;stroke-linejoin:round;stroke-miterlimit:9.60000038;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1.5875002,286.94581 c 0,0 -1.31039369,2.44338 -1.32291669,3.43958 v 3.175 c 0,1.75895 1.41605009,3.175 3.17499989,3.175 H 13.49375 c 1.75895,0 3.175,-1.41605 3.175,-3.175 v -3.175 c -0.152326,-1.22167 -1.322917,-3.43958 -1.322917,-3.43958 l -1.852083,0.26458 H 3.4395834 Z"
+       id="rect4505"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccssssccccc" />
+    <rect
+       style="opacity:1;fill:#808080;fill-opacity:1;stroke:#000000;stroke-width:0.26499999;stroke-linejoin:round;stroke-miterlimit:9.60000038;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4503"
+       width="14.2875"
+       height="8.4666348"
+       x="1.3229165"
+       y="285.62292"
+       ry="2.3812499" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4510"
+       style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="matrix(0.26458333,0,0,0.26458333,-1.0785146,285.20435)"><flowRegion
+         id="flowRegion4512"
+         style="font-size:32px;text-align:center;text-anchor:middle"><rect
+           id="rect4514"
+           width="71"
+           height="47.000065"
+           x="0"
+           y="0"
+           style="font-size:32px;text-align:center;text-anchor:middle" /></flowRegion><flowPara
+         id="flowPara4516"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:32px;font-family:'Covered By Your Grace';-inkscape-font-specification:'Covered By Your Grace';text-align:center;text-anchor:middle">Ctrl</flowPara></flowRoot>  </g>
+</svg>
