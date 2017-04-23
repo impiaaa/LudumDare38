@@ -7,9 +7,13 @@ public class DiggerCharacter : MonoBehaviour {
     public float movementCooldown;
     public LevelManager level;
     public AnimationCurve jumpAnim;
+    public AudioClip jump;
+    public AudioClip dig;
+    public bool enableInput = true;
 
     enum Direction { POSX, POSZ, NEGX, NEGZ, NEUTRAL };
     Direction lastDirection = Direction.NEUTRAL;
+    Direction facing = Direction.POSX;
     float lastMoveTime;
     Vector3 targetPosition;
     Vector3 lastPosition;
@@ -22,7 +26,36 @@ public class DiggerCharacter : MonoBehaviour {
     }
 
     void Update () {
-        if (Time.time - lastMoveTime > movementCooldown)
+        if (enableInput)
+        {
+            if (Input.GetAxis("Fire1") > 0 && transform.localPosition.y > 1)
+            {
+                DoDig((int)transform.localPosition.x, (int)transform.localPosition.y - 1, (int)transform.localPosition.z);
+                DoMove(new Vector3());
+            }
+            else if (Input.GetAxis("Fire2") > 0)
+            {
+                int x = (int)transform.localPosition.x, y = (int)transform.localPosition.y, z = (int)transform.localPosition.z;
+                switch (facing)
+                {
+                    case Direction.POSX:
+                        x++;
+                        break;
+                    case Direction.POSZ:
+                        z++;
+                        break;
+                    case Direction.NEGX:
+                        x--;
+                        break;
+                    case Direction.NEGZ:
+                        z--;
+                        break;
+                }
+                DoDig(x, y, z);
+            }
+        }
+
+        if (Time.time - lastMoveTime > movementCooldown && enableInput)
         {
             transform.localPosition = targetPosition;
             lastPosition = transform.localPosition;
@@ -86,6 +119,7 @@ public class DiggerCharacter : MonoBehaviour {
 
             if (newDirection != lastDirection)
             {
+                lastDirection = newDirection;
                 Vector3 delta;
                 switch (newDirection)
                 {
@@ -105,33 +139,34 @@ public class DiggerCharacter : MonoBehaviour {
                         delta = new Vector3();
                         break;
                 }
-                lastDirection = newDirection;
-                if (delta.sqrMagnitude > 0)
+                if (newDirection != Direction.NEUTRAL)
                 {
                     transform.localRotation = Quaternion.AngleAxis(Mathf.Rad2Deg*Mathf.Atan2(delta.z, delta.x), new Vector3(0, -1, 0)) * initialRotation;
+                    facing = newDirection;
+                    DoMove(delta);
                 }
-
-                DoMove(delta);
             }
         }
-        else
+        else if (transform.localPosition != targetPosition)
         {
             float animTime = (Time.time - lastMoveTime) / movementCooldown;
             Vector3 newpos = lastPosition * (1.0f - animTime) + targetPosition * animTime;
-            newpos = new Vector3(newpos.x, jumpAnim.Evaluate(animTime) * Mathf.Abs(lastPosition.y - targetPosition.y)/2 + newpos.y, newpos.z);
+            float jumpHeight = 0.25f+Mathf.Abs(lastPosition.y - targetPosition.y) / 2;
+            newpos = new Vector3(newpos.x, jumpAnim.Evaluate(animTime) * jumpHeight + newpos.y, newpos.z);
             transform.localPosition = newpos;
         }
     }
 
     void DoMove(Vector3 delta)
     {
+        Debug.Log("DoMove");
         lastMoveTime = Time.time;
         Vector3 newPos = transform.localPosition + delta;
         int x = (int)newPos.x, y = (int)newPos.y, z = (int)newPos.z;
         // Jump up
         if (level.Collides(x, y, z))
         {
-            if (!level.Collides(x, y+1, z))
+            if (!level.Collides(x, y+1, z) && !level.Collides((int)transform.localPosition.x, y+1, (int)transform.localPosition.z))
             {
                 Debug.Log("Jump up");
                 y++;
@@ -153,9 +188,31 @@ public class DiggerCharacter : MonoBehaviour {
                 return;
             }
         }
-        targetPosition = new Vector3(x, y, z);
-        if (targetPosition != transform.localPosition && delta.sqrMagnitude > 0)
+        if (!level.CanStandOn(x, y - 1, z))
         {
+            Debug.Log("Can't fall here");
+            return;
+        }
+        targetPosition = new Vector3(x, y, z);
+        if (level.SafeGet(x,y,z) == 'a')
+        {
+            enableInput = false;
+            level.DoLevelEnd();
+        }
+        else if (targetPosition != transform.localPosition && delta.sqrMagnitude > 0)
+        {
+            GetComponent<AudioSource>().clip = jump;
+            GetComponent<AudioSource>().Play();
+        }
+    }
+
+    void DoDig(int x, int y, int z)
+    {
+        if (level.CanDig(x, y, z))
+        {
+            level.level[x, y, z] = ' ';
+            level.UpdateLevel();
+            GetComponent<AudioSource>().clip = dig;
             GetComponent<AudioSource>().Play();
         }
     }
