@@ -81,18 +81,13 @@
        id="path4503"
        d="m 3.9687501,291.17915 v -1.58749 H 1.8520807 v -0.79376 l -1.58750095,1.5875 1.58750095,1.58751 v -0.79376 z"
        style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 7.9374997,286.68123 v 4.49791"
-       id="path4505"
-       inkscape:connector-curvature="0" />
     <rect
        style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4507"
-       width="1.8520831"
-       height="3.7041624"
-       x="8.4666662"
+       width="4.7624984"
+       height="3.7041755"
+       x="5.5562501"
        y="287.47501"
-       ry="0.79374999" />
+       ry="1.4552083" />
   </g>
 </svg>

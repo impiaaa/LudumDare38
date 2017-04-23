@@ -172,6 +172,7 @@ public class LevelManager : MonoBehaviour
             UpdateLevel();
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             DiggerCharacter chara = player.GetComponent<DiggerCharacter>();
+            Camera.main.GetComponent<CameraController>().angle = -0.75f * Mathf.PI;
             player.transform.localPosition = chara.targetPosition = new Vector3(0, 1, 0);
             Camera.main.GetComponent<FlyAwayAnimator>().reverse = true;
             Camera.main.GetComponent<FlyAwayAnimator>().StartCoroutine("BeginAnimation", new System.Action(LevelReady));
