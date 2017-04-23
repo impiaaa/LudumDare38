@@ -10,7 +10,9 @@ public class LevelManager : MonoBehaviour
     public GameObject grass;
     public GameObject tree;
     public GameObject artifact;
-    public TextAsset levelFile;
+
+    public TextAsset[] levelFiles;
+    public int levelIndex = 0;
 
     public char[,,] level;
     private GameObject[,,] tiles;
@@ -18,6 +20,8 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        Camera.main.GetComponent<FlyAwayAnimator>().reverse = true;
+        Camera.main.GetComponent<FlyAwayAnimator>().StartCoroutine("BeginAnimation", new System.Action(LevelReady));
         if (level == null || level.Length == 0)
         {
             SetupLevel();
@@ -30,7 +34,7 @@ public class LevelManager : MonoBehaviour
 
     void SetupLevel()
     {
-        string[] horizSlices = levelFile.text.Split(new string[] { "\n\n" }, System.StringSplitOptions.RemoveEmptyEntries);
+        string[] horizSlices = levelFiles[levelIndex].text.Split(new string[] { "\n\n" }, System.StringSplitOptions.RemoveEmptyEntries);
         Debug.Log(horizSlices.Length.ToString() + " slices");
         string[] firstSliceSplit = horizSlices[0].Split('\n');
         Debug.Log(firstSliceSplit.Length.ToString() + " columns");
@@ -151,5 +155,31 @@ public class LevelManager : MonoBehaviour
         Debug.Log("Level end");
         GetComponent<AudioSource>().Play();
         Object.Destroy(goal);
+        Camera.main.GetComponent<FlyAwayAnimator>().reverse = false;
+        Camera.main.GetComponent<FlyAwayAnimator>().StartCoroutine("BeginAnimation", new System.Action(LoadNextLevel));
+    }
+
+    public void LoadNextLevel()
+    {
+        levelIndex++;
+        if (levelIndex >= levelFiles.Length)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+        }
+        else
+        {
+            SetupLevel();
+            UpdateLevel();
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            DiggerCharacter chara = player.GetComponent<DiggerCharacter>();
+            player.transform.localPosition = chara.targetPosition = new Vector3(0, 1, 0);
+            Camera.main.GetComponent<FlyAwayAnimator>().reverse = true;
+            Camera.main.GetComponent<FlyAwayAnimator>().StartCoroutine("BeginAnimation", new System.Action(LevelReady));
+        }
+    }
+
+    public void LevelReady()
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<DiggerCharacter>().enableInput = true;
     }
 }

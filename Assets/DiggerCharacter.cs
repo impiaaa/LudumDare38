@@ -2,30 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DiggerCharacter : MonoBehaviour {
+public class DiggerCharacter : MonoBehaviour
+{
     public float movementThreshold;
     public float movementCooldown;
-    public LevelManager level;
     public AnimationCurve jumpAnim;
     public AudioClip jump;
     public AudioClip dig;
     public bool enableInput = true;
+    public Vector3 targetPosition;
 
     enum Direction { POSX, POSZ, NEGX, NEGZ, NEUTRAL };
     Direction lastDirection = Direction.NEUTRAL;
     Direction facing = Direction.POSX;
     float lastMoveTime;
-    Vector3 targetPosition;
     Vector3 lastPosition;
     Quaternion initialRotation;
+    LevelManager level;
 
     void Start()
     {
         initialRotation = transform.localRotation;
+        level = GetComponentInParent<LevelManager>();
         DoMove(new Vector3());
     }
 
-    void Update () {
+    void Update()
+    {
         if (enableInput)
         {
             if (Input.GetAxis("Fire1") > 0 && transform.localPosition.y > 1)
@@ -55,95 +58,98 @@ public class DiggerCharacter : MonoBehaviour {
             }
         }
 
-        if (Time.time - lastMoveTime > movementCooldown && enableInput)
+        if (Time.time - lastMoveTime > movementCooldown)
         {
             transform.localPosition = targetPosition;
             lastPosition = transform.localPosition;
 
-            Vector2 joyPosition = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            float cameraAngle = ((Camera.main.GetComponent<CameraController>().angle * Mathf.Rad2Deg) - 45 + 180)%360;
-            joyPosition = (Vector2)(Quaternion.Euler(0, 0, cameraAngle) * (Vector3)(joyPosition));
-            Direction newDirection;
-            if (joyPosition.sqrMagnitude < movementThreshold * movementThreshold)
+            if (enableInput)
             {
-                newDirection = Direction.NEUTRAL;
-            }
-            else
-            {
-                if (joyPosition.x > 0)
+                Vector2 joyPosition = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                float cameraAngle = ((Camera.main.GetComponent<CameraController>().angle * Mathf.Rad2Deg) - 45 + 180) % 360;
+                joyPosition = (Vector2)(Quaternion.Euler(0, 0, cameraAngle) * (Vector3)(joyPosition));
+                Direction newDirection;
+                if (joyPosition.sqrMagnitude < movementThreshold * movementThreshold)
                 {
-                    if (joyPosition.y > 0)
-                    {
-                        newDirection = Direction.POSX;
-                    }
-                    else if (joyPosition.y < 0)
-                    {
-                        newDirection = Direction.NEGZ;
-                    }
-                    else
-                    {
-                        newDirection = Direction.NEGZ;
-                    }
-                }
-                else if (joyPosition.x < 0)
-                {
-                    if (joyPosition.y > 0)
-                    {
-                        newDirection = Direction.POSZ;
-                    }
-                    else if (joyPosition.y < 0)
-                    {
-                        newDirection = Direction.NEGX;
-                    }
-                    else
-                    {
-                        newDirection = Direction.POSZ;
-                    }
+                    newDirection = Direction.NEUTRAL;
                 }
                 else
                 {
-                    if (joyPosition.y > 0)
+                    if (joyPosition.x > 0)
                     {
-                        newDirection = Direction.POSX;
+                        if (joyPosition.y > 0)
+                        {
+                            newDirection = Direction.POSX;
+                        }
+                        else if (joyPosition.y < 0)
+                        {
+                            newDirection = Direction.NEGZ;
+                        }
+                        else
+                        {
+                            newDirection = Direction.NEGZ;
+                        }
                     }
-                    else if (joyPosition.y < 0)
+                    else if (joyPosition.x < 0)
                     {
-                        newDirection = Direction.NEGX;
+                        if (joyPosition.y > 0)
+                        {
+                            newDirection = Direction.POSZ;
+                        }
+                        else if (joyPosition.y < 0)
+                        {
+                            newDirection = Direction.NEGX;
+                        }
+                        else
+                        {
+                            newDirection = Direction.POSZ;
+                        }
                     }
                     else
                     {
-                        newDirection = Direction.NEUTRAL;
+                        if (joyPosition.y > 0)
+                        {
+                            newDirection = Direction.POSX;
+                        }
+                        else if (joyPosition.y < 0)
+                        {
+                            newDirection = Direction.NEGX;
+                        }
+                        else
+                        {
+                            newDirection = Direction.NEUTRAL;
+                        }
                     }
                 }
-            }
 
-            if (newDirection != lastDirection)
-            {
-                lastDirection = newDirection;
-                Vector3 delta;
-                switch (newDirection)
+                if (newDirection != lastDirection)
                 {
-                    case Direction.NEGX:
-                        delta = new Vector3(-1, 0, 0);
-                        break;
-                    case Direction.POSX:
-                        delta = new Vector3(1, 0, 0);
-                        break;
-                    case Direction.NEGZ:
-                        delta = new Vector3(0, 0, -1);
-                        break;
-                    case Direction.POSZ:
-                        delta = new Vector3(0, 0, 1);
-                        break;
-                    default:
-                        delta = new Vector3();
-                        break;
-                }
-                if (newDirection != Direction.NEUTRAL)
-                {
-                    transform.localRotation = Quaternion.AngleAxis(Mathf.Rad2Deg*Mathf.Atan2(delta.z, delta.x), new Vector3(0, -1, 0)) * initialRotation;
-                    facing = newDirection;
-                    DoMove(delta);
+                    lastDirection = newDirection;
+                    Vector3 delta;
+                    switch (newDirection)
+                    {
+                        case Direction.NEGX:
+                            delta = new Vector3(-1, 0, 0);
+                            break;
+                        case Direction.POSX:
+                            delta = new Vector3(1, 0, 0);
+                            break;
+                        case Direction.NEGZ:
+                            delta = new Vector3(0, 0, -1);
+                            break;
+                        case Direction.POSZ:
+                            delta = new Vector3(0, 0, 1);
+                            break;
+                        default:
+                            delta = new Vector3();
+                            break;
+                    }
+                    if (newDirection != Direction.NEUTRAL)
+                    {
+                        transform.localRotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(delta.z, delta.x), new Vector3(0, -1, 0)) * initialRotation;
+                        facing = newDirection;
+                        DoMove(delta);
+                    }
                 }
             }
         }
@@ -151,7 +157,7 @@ public class DiggerCharacter : MonoBehaviour {
         {
             float animTime = (Time.time - lastMoveTime) / movementCooldown;
             Vector3 newpos = lastPosition * (1.0f - animTime) + targetPosition * animTime;
-            float jumpHeight = 0.25f+Mathf.Abs(lastPosition.y - targetPosition.y) / 2;
+            float jumpHeight = 0.25f + Mathf.Abs(lastPosition.y - targetPosition.y) / 2;
             newpos = new Vector3(newpos.x, jumpAnim.Evaluate(animTime) * jumpHeight + newpos.y, newpos.z);
             transform.localPosition = newpos;
         }
@@ -166,7 +172,7 @@ public class DiggerCharacter : MonoBehaviour {
         // Jump up
         if (level.Collides(x, y, z))
         {
-            if (!level.Collides(x, y+1, z) && !level.Collides((int)transform.localPosition.x, y+1, (int)transform.localPosition.z))
+            if (!level.Collides(x, y + 1, z) && !level.Collides((int)transform.localPosition.x, y + 1, (int)transform.localPosition.z))
             {
                 Debug.Log("Jump up");
                 y++;
@@ -178,7 +184,7 @@ public class DiggerCharacter : MonoBehaviour {
             }
         }
         // Fall down
-        while (!level.Collides(x, y-1, z))
+        while (!level.Collides(x, y - 1, z))
         {
             Debug.Log("Fall down");
             y--;
@@ -194,7 +200,7 @@ public class DiggerCharacter : MonoBehaviour {
             return;
         }
         targetPosition = new Vector3(x, y, z);
-        if (level.SafeGet(x,y,z) == 'a')
+        if (level.SafeGet(x, y, z) == 'a')
         {
             enableInput = false;
             level.DoLevelEnd();
