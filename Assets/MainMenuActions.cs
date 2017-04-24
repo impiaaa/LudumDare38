@@ -36,10 +36,4 @@ public class MainMenuActions : MonoBehaviour {
             audio.volume = x;
         }
     }
-
-    [UnityEditor.MenuItem("Screenshot/Take screenshot")]
-    static void Screenshot()
-    {
-        Application.CaptureScreenshot("test.png");
-    }
 }
