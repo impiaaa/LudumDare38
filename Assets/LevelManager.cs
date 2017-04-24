@@ -171,19 +171,33 @@ public class LevelManager : MonoBehaviour
         return c == 's' || c == 'd' || c == 'g';
     }
 
+    private void Update()
+    {
+        if (Input.GetAxis("Pause") > 0 && !Camera.main.GetComponent<FlyAwayAnimator>().inProgress)
+        {
+            nextLevel = false;
+            Camera.main.GetComponent<FlyAwayAnimator>().reverse = false;
+            Camera.main.GetComponent<FlyAwayAnimator>().StartCoroutine("BeginAnimation", new System.Action(LoadNextLevel));
+        }
+    }
+
     public void DoLevelEnd()
     {
         Debug.Log("Level end");
+        nextLevel = true;
         GetComponent<AudioSource>().Play();
         Object.Destroy(goal);
         Camera.main.GetComponent<FlyAwayAnimator>().reverse = false;
         Camera.main.GetComponent<FlyAwayAnimator>().StartCoroutine("BeginAnimation", new System.Action(LoadNextLevel));
     }
 
+    private bool nextLevel = true;
+
     public void LoadNextLevel()
     {
         Debug.Log("Loading next level");
-        levelIndex++;
+        if (nextLevel)
+            levelIndex++;
         if (levelIndex >= levelFiles.Length)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");

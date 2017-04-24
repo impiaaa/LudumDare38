@@ -7,8 +7,10 @@ public class FlyAwayAnimator : MonoBehaviour {
     public float transitionTime;
     public AnimationCurve transitionCurve;
     public bool reverse = false;
+    public bool inProgress = false;
 
     IEnumerator BeginAnimation (System.Action callback) {
+        inProgress = true;
         float startTime = Time.time;
         float initialHeight = transform.position.y;
 
@@ -23,6 +25,7 @@ public class FlyAwayAnimator : MonoBehaviour {
             yield return null;
         }
 
+        inProgress = false;
         callback();
 	}
 }
